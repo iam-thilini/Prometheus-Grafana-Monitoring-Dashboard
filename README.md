@@ -117,16 +117,16 @@ services:
 ```
 
 ## How to Run the Project
-**1. Clone the repository**
+### 1. Clone the repository
 ```
-git clone https://github.com/your-username/prometheus-grafana-monitoring-dashboard.git
+git clone https://github.com/iam-thilini/Prometheus-Grafana-Monitoring-Dashboard.git
 cd prometheus-grafana-monitoring-dashboard
 ```
-**2. Start Prometheus and Grafana**
+### 2. Start Prometheus and Grafana
 ```
 docker compose up -d
 ```
-**3. Check running containers**
+### 3. Check running containers
 ```
 docker ps
 ```
@@ -135,17 +135,17 @@ You should see:
 local-prometheus
 local-grafana
 ```
-**4. Open Prometheus**
+### 4. Open Prometheus
 ```
 http://localhost:9090
 ```
-**5. Open Prometheus targets page**
+### 5. Open Prometheus targets page
 ```
 http://localhost:9090/targets
 ```
 All targets should show as `UP`
 
-**6. Open Grafana**
+### 6. Open Grafana
 ```
 http://localhost:3000
 ```
@@ -154,7 +154,7 @@ Default login:
 Username: admin
 Password: admin
 ```
-**7. Add Prometheus data source in Grafana**
+### 7. Add Prometheus data source in Grafana
 Use this Prometheus URL inside Grafana:
 ```
 http://prometheus:9090
@@ -173,7 +173,7 @@ This works because Grafana and Prometheus are running inside the same Docker Com
 | Prometheus Ingestion Rate | Time series   | Shows how many metric samples Prometheus is ingesting per second  |
 
 ## Dashboard Queries
-**1. Target Health**
+### 1. Target Health
 ```
 up
 ```
@@ -181,7 +181,7 @@ Description:
 ```txt
 Displays the current availability status of each monitored target. A status of UP means Prometheus is successfully scraping metrics from that service.
 ```
-**2. CPU Usage**
+### 2. CPU Usage
 ```
 sum by(instance) (
   rate(demo_cpu_usage_seconds_total{mode!="idle"}[5m])
@@ -194,7 +194,7 @@ Description:
 ```txt
 Shows CPU usage over time for each demo application instance, helping identify load patterns and performance changes across services.
 ```
-**3. Request Rate**
+### 3. Request Rate
 ```
 sum(rate(demo_api_request_duration_seconds_count[5m]))
 ```
@@ -202,7 +202,7 @@ Description:
 ```txt
 Displays the total API request rate across all demo application services, helping monitor traffic volume and system activity over time.
 ```
-**4. Request Rate by Instance**
+### 4. Request Rate by Instance
 ```
 sum by(instance) (
   rate(demo_api_request_duration_seconds_count[5m])
@@ -212,7 +212,7 @@ Description:
 ```txt
 Shows API request traffic separately for each application instance, helping identify load distribution and whether one service instance is receiving more traffic than others.
 ```
-**5. Top API Endpoints**
+### 5. Top API Endpoints
 ```
 label_join(
   topk(3, sum by(path, method) (
@@ -228,7 +228,7 @@ Description:
 ```txt
 Displays the top 3 busiest API endpoints by request rate, helping identify which routes receive the most traffic.
 ```
-**6. Average API Latency**
+### 6. Average API Latency
 ```
 sum by(path, method) (
   rate(demo_api_request_duration_seconds_sum[5m])
@@ -242,7 +242,7 @@ Description:
 ```txt
 Shows the average request duration for each API endpoint, helping identify slow routes and potential performance bottlenecks.
 ```
-**7. Prometheus Ingestion Rate**
+### 7. Prometheus Ingestion Rate
 ```
 sum(rate(prometheus_tsdb_head_samples_appended_total[1m]))
 ```
@@ -260,11 +260,72 @@ This project includes three Grafana-managed alert rules.
 
 ### Alert 1: Target Down Alert
 **Query**
+```
+sum(1 - up)
+```
+**Condition**
+```txt
+Alert when query result is above 0
+```
+**Meaning**
+```txt
+0 = all targets are UP
+1 or more = one or more targets are DOWN
+```
+**Description**
+```txt
+Fires when Prometheus cannot scrape one or more configured targets, indicating that a monitored service may be unavailable.
+```
 
+### Alert 2: High CPU Usage Alert
+**Query**
+```
+sum by(instance) (
+  rate(demo_cpu_usage_seconds_total{mode!="idle"}[5m])
+)
+/
+on(instance) group_left()
+demo_num_cpus
+```
+**Condition**
+```txt
+Alert when CPU usage is above 0.8
+```
+**Meaning**
+```txt
+0.8 = 80% CPU usage
+```
+**Description**
+```txt
+Fires when CPU usage of a demo application instance stays above the configured threshold, helping identify potential resource pressure.
+```
 
-
-
-
+### Alert 3: High API Latency Alert
+**Query**
+```
+sum by(path, method) (
+  rate(demo_api_request_duration_seconds_sum[5m])
+)
+/
+sum by(path, method) (
+  rate(demo_api_request_duration_seconds_count[5m])
+)
+```
+**Condition**
+```txt
+Alert when average API latency is above 0.5 seconds
+```
+**Description**
+```txt
+Fires when the average API request duration exceeds the configured threshold, helping identify slow endpoints and performance bottlenecks.
+```
+### Contact Point
+A webhook-based contact point was configured for alert notification testing.
+Example contact point name:
+```txt
+Local Monitoring Alerts
+```
+This contact point can be connected to a test webhook service or another notification system.
 
 
 
