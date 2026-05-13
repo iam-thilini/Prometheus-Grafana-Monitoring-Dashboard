@@ -122,7 +122,6 @@ services:
 git clone https://github.com/your-username/prometheus-grafana-monitoring-dashboard.git
 cd prometheus-grafana-monitoring-dashboard
 ```
-
 **2. Start Prometheus and Grafana**
 ```
 docker compose up -d
@@ -136,6 +135,43 @@ You should see:
 local-prometheus
 local-grafana
 ```
+**4. Open Prometheus**
+```
+http://localhost:9090
+```
+**5. Open Prometheus targets page**
+```
+http://localhost:9090/targets
+```
+All targets should show as `UP`
+
+**6. Open Grafana**
+```
+http://localhost:3000
+```
+Default login:
+```
+Username: admin
+Password: admin
+```
+**7. Add Prometheus data source in Grafana**
+Use this Prometheus URL inside Grafana:
+```
+http://prometheus:9090
+```
+This works because Grafana and Prometheus are running inside the same Docker Compose network.
+
+## Dashboard Panels
+| Panel                     | Visualization | Description                                                       |
+| ------------------------- | ------------- | ----------------------------------------------------------------- |
+| Target Health             | Table         | Displays the current availability status of each monitored target |
+| CPU Usage                 | Time series   | Shows CPU usage over time for each demo application instance      |
+| Request Rate              | Time series   | Displays total API request rate across all demo services          |
+| Request Rate by Instance  | Time series   | Shows API traffic separately for each application instance        |
+| Top API Endpoints         | Bar chart     | Displays the top 3 busiest API endpoints by request rate          |
+| Average API Latency       | Time series   | Shows average request duration for each API endpoint              |
+| Prometheus Ingestion Rate | Time series   | Shows how many metric samples Prometheus is ingesting per second  |
+
 
 
 
