@@ -172,7 +172,15 @@ This works because Grafana and Prometheus are running inside the same Docker Com
 | Average API Latency       | Time series   | Shows average request duration for each API endpoint              |
 | Prometheus Ingestion Rate | Time series   | Shows how many metric samples Prometheus is ingesting per second  |
 
-
+## Dashboard Queries
+**1. Target Health**
+```
+up
+```
+Description:
+```txt
+Displays the current availability status of each monitored target. A status of UP means Prometheus is successfully scraping metrics from that service.
+```
 
 
 
