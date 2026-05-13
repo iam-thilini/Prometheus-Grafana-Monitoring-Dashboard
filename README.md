@@ -327,7 +327,15 @@ Local Monitoring Alerts
 ```
 This contact point can be connected to a test webhook service or another notification system.
 
+## Screenshots
+### Grafana Dashboard
+![Grafana Dashboard](screenshots/dashboard.png)
 
+### Prometheus Targets
+![Prometheus Targets](screenshots/prometheus-targets.png)
+
+### Grafana Alerts
+![Grafana Alerts](screenshots/grafana-alerts.png)
 
 
 
