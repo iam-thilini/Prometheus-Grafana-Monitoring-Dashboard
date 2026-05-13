@@ -65,9 +65,11 @@ Grafana Dashboard + Alerts
 - Webhook-based alert notification testing
 
 ## Project Structure
+```txt
 monitoring-project/
 ├── docker-compose.yml
 ├── prometheus.yml
+```
 
 ## Prometheus Configuration
 Prometheus is configured with a 5s scrape interval and two scrape jobs:
@@ -117,8 +119,8 @@ services:
 ## How to Run the Project
 **1. Clone the repository**
 ```
-  git clone https://github.com/your-username/prometheus-grafana-monitoring-dashboard.git
-  cd prometheus-grafana-monitoring-dashboard
+git clone https://github.com/your-username/prometheus-grafana-monitoring-dashboard.git
+cd prometheus-grafana-monitoring-dashboard
 ```
 **2. Start Prometheus and Grafana**
 ```
