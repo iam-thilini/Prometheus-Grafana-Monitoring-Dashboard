@@ -181,7 +181,85 @@ Description:
 ```txt
 Displays the current availability status of each monitored target. A status of UP means Prometheus is successfully scraping metrics from that service.
 ```
+**2. CPU Usage**
+```
+sum by(instance) (
+  rate(demo_cpu_usage_seconds_total{mode!="idle"}[5m])
+)
+/
+on(instance) group_left()
+demo_num_cpus
+```
+Description:
+```txt
+Shows CPU usage over time for each demo application instance, helping identify load patterns and performance changes across services.
+```
+**3. Request Rate**
+```
+sum(rate(demo_api_request_duration_seconds_count[5m]))
+```
+Description:
+```txt
+Displays the total API request rate across all demo application services, helping monitor traffic volume and system activity over time.
+```
+**4. Request Rate by Instance**
+```
+sum by(instance) (
+  rate(demo_api_request_duration_seconds_count[5m])
+)
+```
+Description:
+```txt
+Shows API request traffic separately for each application instance, helping identify load distribution and whether one service instance is receiving more traffic than others.
+```
+**5. Top API Endpoints**
+```
+label_join(
+  topk(3, sum by(path, method) (
+    rate(demo_api_request_duration_seconds_count[5m])
+  )),
+  "endpoint",
+  " ",
+  "method",
+  "path"
+)
+```
+Description:
+```txt
+Displays the top 3 busiest API endpoints by request rate, helping identify which routes receive the most traffic.
+```
+**6. Average API Latency**
+```
+sum by(path, method) (
+  rate(demo_api_request_duration_seconds_sum[5m])
+)
+/
+sum by(path, method) (
+  rate(demo_api_request_duration_seconds_count[5m])
+)
+```
+Description:
+```txt
+Shows the average request duration for each API endpoint, helping identify slow routes and potential performance bottlenecks.
+```
+**7. Prometheus Ingestion Rate**
+```
+sum(rate(prometheus_tsdb_head_samples_appended_total[1m]))
+```
+Description:
+```txt
+Shows how many metric samples Prometheus is ingesting per second, helping monitor Prometheus storage and data collection activity.
+```
+## Grafana Alert Rules
+This project includes three Grafana-managed alert rules.
+| Alert                  | Purpose                                                         |
+| ---------------------- | --------------------------------------------------------------- |
+| Target Down Alert      | Fires when one or more monitored targets are unavailable        |
+| High CPU Usage Alert   | Fires when CPU usage exceeds the configured threshold           |
+| High API Latency Alert | Fires when average API latency exceeds the configured threshold |
 
+## Alert 1: Target Down Alert
+**Query**
 
 
 
