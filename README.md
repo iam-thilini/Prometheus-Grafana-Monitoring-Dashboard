@@ -258,7 +258,7 @@ This project includes three Grafana-managed alert rules.
 | High CPU Usage Alert   | Fires when CPU usage exceeds the configured threshold           |
 | High API Latency Alert | Fires when average API latency exceeds the configured threshold |
 
-## Alert 1: Target Down Alert
+### Alert 1: Target Down Alert
 **Query**
 
 
