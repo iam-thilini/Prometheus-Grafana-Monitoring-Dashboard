@@ -122,6 +122,7 @@ services:
 git clone https://github.com/your-username/prometheus-grafana-monitoring-dashboard.git
 cd prometheus-grafana-monitoring-dashboard
 ```
+
 **2. Start Prometheus and Grafana**
 ```
 docker compose up -d
