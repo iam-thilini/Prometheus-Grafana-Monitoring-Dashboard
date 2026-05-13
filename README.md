@@ -126,6 +126,15 @@ cd prometheus-grafana-monitoring-dashboard
 ```
 docker compose up -d
 ```
+**3. Check running containers**
+```
+docker ps
+```
+You should see:
+```
+local-prometheus
+local-grafana
+```
 
 
 
